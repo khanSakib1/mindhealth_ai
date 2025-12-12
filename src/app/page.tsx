@@ -48,7 +48,7 @@ export default function LandingPage() {
             <Link href="/login">Log In</Link>
           </Button>
           <Button asChild>
-            <Link href="/signup">Get Started</Link>
+            <Link href="/login">Get Started</Link>
           </Button>
         </div>
       </header>
@@ -78,7 +78,7 @@ export default function LandingPage() {
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Button size="lg" asChild>
-                  <Link href="/signup">Start for Free</Link>
+                  <Link href="/login">Start for Free</Link>
                 </Button>
               </div>
             </div>
