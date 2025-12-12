@@ -57,8 +57,17 @@ export default function DashboardPage() {
     }
   }, [user]);
 
-  if (isLoading || !user || !data) {
+  if (isLoading || !user) {
     return <DashboardSkeleton />;
+  }
+
+  if (!data) {
+    return (
+        <div className="text-center py-16">
+            <h2 className="text-2xl font-semibold">Welcome!</h2>
+            <p className="text-muted-foreground mt-2">Could not load dashboard data. Please try again later.</p>
+        </div>
+    );
   }
 
   const { recentEntry, recentMood, wellnessTip, quoteOfTheDay } = data;

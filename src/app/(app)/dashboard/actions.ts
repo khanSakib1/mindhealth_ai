@@ -4,9 +4,9 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import type { JournalEntry, MoodLog } from "@/lib/definitions";
 import { generatePersonalizedWellnessTips } from "@/ai/flows/generate-personalized-wellness-tips";
-import { generateQuoteOfTheDay } from "@/ai/flows/generate-quote-of-the-day";
 import { getStressLevelAdvice } from "@/ai/flows/get-stress-level-advice";
 import { getStressLevelFromQuiz, type QuizAnswers } from "@/ai/flows/get-stress-level-from-quiz";
+import { quotes } from "@/lib/quotes";
 
 async function getRecentJournalEntries(userId: string, count: number): Promise<JournalEntry[]> {
   // Mocked for guest user
@@ -66,13 +66,19 @@ export type DashboardData = {
   }
 }
 
+function getQuoteOfTheDay() {
+  const randomIndex = Math.floor(Math.random() * quotes.length);
+  return quotes[randomIndex];
+}
+
+
 export async function getDashboardData(userId: string): Promise<DashboardData> {
-    const [journalEntries, moodLogs, quoteData] = await Promise.all([
+    const [journalEntries, moodLogs] = await Promise.all([
         getRecentJournalEntries(userId, 1),
         getRecentMoodLogs(userId, 1),
-        generateQuoteOfTheDay({ category: "mindfulness" })
     ]);
 
+    const quoteData = getQuoteOfTheDay();
     const recentEntry = journalEntries.length > 0 ? journalEntries[0] : null;
     const recentMood = moodLogs.length > 0 ? moodLogs[0] : null;
 
@@ -100,7 +106,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
         recentEntry,
         recentMood,
         wellnessTip,
-        quoteOfTheDay: quoteData || { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" }
+        quoteOfTheDay: quoteData
     };
 }
 
