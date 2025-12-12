@@ -14,6 +14,10 @@ const journalSchema = z.object({
 });
 
 export async function getJournalEntries(userId: string): Promise<JournalEntry[]> {
+  if (userId === 'guest-user') {
+    return Promise.resolve([]);
+  }
+  
   const q = query(
     collection(db, "journal_entries"),
     where("userId", "==", userId),

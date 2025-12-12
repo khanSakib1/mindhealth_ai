@@ -99,7 +99,7 @@ export default function JournalPage() {
     return getWellnessTips(user.uid, content);
   }
 
-  if (!user || !entries) {
+  if (!user || entries === null) {
     return <JournalSkeleton />;
   }
 
