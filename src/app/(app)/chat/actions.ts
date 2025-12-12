@@ -13,7 +13,13 @@ export async function getInitialMessage(): Promise<ChatMessage> {
 }
 
 export async function sendMessage(message: string, history: ChatMessage[]): Promise<ChatMessage> {
-    const res = await mentalWellnessConversation({ message, history });
+    // The AI flow expects a history of objects with { role, content }.
+    // The full history including the new message is passed here.
+    const res = await mentalWellnessConversation({ 
+        message: message, 
+        history: history 
+    });
+
     const aiMessage: ChatMessage = { role: 'assistant', content: res.response };
     return aiMessage;
 }

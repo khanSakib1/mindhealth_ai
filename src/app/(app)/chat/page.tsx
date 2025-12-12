@@ -42,9 +42,14 @@ export default function ChatPage() {
 
     const handleSendMessage = async (message: string): Promise<ChatMessage> => {
         const userMessage: ChatMessage = { role: 'user', content: message };
+        
+        // We capture the current messages to send to the backend.
+        const currentMessages = messages || [];
+        
         setMessages((prev) => [...(prev || []), userMessage]);
         
-        const aiResponse = await sendChatMessage(message, [...(messages || []), userMessage]);
+        // Pass the message history *before* the new user message.
+        const aiResponse = await sendChatMessage(message, [...currentMessages, userMessage]);
         return aiResponse;
     }
 
