@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A serene landscape with a person meditating at sunrise.",
+      "imageUrl": "https://images.unsplash.com/photo-1641391400871-3a6578a11d5a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2VyZW5lJTIwbWVkaXRhdGlvbnxlbnwwfHx8fDE3NjU1MTg2ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "serene meditation"
+    },
+    {
+      "id": "chat",
+      "description": "Two abstract speech bubbles representing a conversation.",
+      "imageUrl": "https://images.unsplash.com/photo-1641122164135-c58019a13863?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb252ZXJzYXRpb24lMjBhYnN0cmFjdHxlbnwwfHx8fDE3NjU1MTg2ODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "conversation abstract"
+    },
+    {
+      "id": "journal",
+      "description": "An open journal with a pen on a wooden desk.",
+      "imageUrl": "https://images.unsplash.com/photo-1676287569499-62bb892d67d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxqb3VybmFsJTIwZGVza3xlbnwwfHx8fDE3NjU1MTg2ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "journal desk"
+    },
+    {
+      "id": "mood",
+      "description": "A collection of colorful emoji representing different moods.",
+      "imageUrl": "https://images.unsplash.com/photo-1736950840681-decf3262aa8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb29kJTIwZW1vaml8ZW58MHx8fHwxNzY1NTE4NjgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "mood emoji"
+    },
+    {
+      "id": "exercises",
+      "description": "A person doing a yoga pose in a calm, natural setting.",
+      "imageUrl": "https://images.unsplash.com/photo-1608405059861-b21a68ae76a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx5b2dhJTIwbmF0dXJlfGVufDB8fHx8MTc2NTUxODY4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "yoga nature"
+    }
+  ]
 }
