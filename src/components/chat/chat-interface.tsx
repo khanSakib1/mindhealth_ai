@@ -46,8 +46,6 @@ export function ChatInterface({ messages, setMessages, sendMessage }: ChatInterf
   }, [messages]);
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
-    const userMessage: ChatMessage = { role: "user", content: values.message };
-    setMessages((prev) => [...(prev || []), userMessage]);
     setIsLoading(true);
     form.reset();
 

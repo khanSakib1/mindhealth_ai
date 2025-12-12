@@ -40,6 +40,14 @@ export default function ChatPage() {
         });
     }, []);
 
+    const handleSendMessage = async (message: string): Promise<ChatMessage> => {
+        const userMessage: ChatMessage = { role: 'user', content: message };
+        setMessages((prev) => [...(prev || []), userMessage]);
+        
+        const aiResponse = await sendChatMessage(message, [...(messages || []), userMessage]);
+        return aiResponse;
+    }
+
     if (!messages) {
         return <ChatSkeleton />;
     }
@@ -54,7 +62,7 @@ export default function ChatPage() {
                 <ChatInterface 
                     messages={messages} 
                     setMessages={setMessages}
-                    sendMessage={sendChatMessage} 
+                    sendMessage={handleSendMessage} 
                 />
             </div>
         </div>

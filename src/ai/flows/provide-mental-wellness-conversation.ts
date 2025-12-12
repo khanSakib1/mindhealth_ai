@@ -10,9 +10,14 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type {ChatMessage} from '@/lib/definitions';
 
 const MentalWellnessConversationInputSchema = z.object({
   message: z.string().describe('The user message to the AI assistant.'),
+  history: z.array(z.object({
+      role: z.enum(['user', 'assistant']),
+      content: z.string()
+  })).describe('The conversation history.')
 });
 export type MentalWellnessConversationInput = z.infer<typeof MentalWellnessConversationInputSchema>;
 
@@ -31,7 +36,12 @@ const prompt = ai.definePrompt({
   output: {schema: MentalWellnessConversationOutputSchema},
   prompt: `You are a friendly and empathetic AI assistant specializing in mental wellness.
 
-  Respond to the user message with helpful advice and support.
+  Here is the conversation history:
+  {{#each history}}
+    {{role}}: {{content}}
+  {{/each}}
+  
+  Respond to the last user message with helpful advice and support.
 
   User Message: {{{message}}}
   `,

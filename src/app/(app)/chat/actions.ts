@@ -12,8 +12,8 @@ export async function getInitialMessage(): Promise<ChatMessage> {
     });
 }
 
-export async function sendMessage(message: string): Promise<ChatMessage> {
-    const res = await mentalWellnessConversation({ message });
+export async function sendMessage(message: string, history: ChatMessage[]): Promise<ChatMessage> {
+    const res = await mentalWellnessConversation({ message, history });
     const aiMessage: ChatMessage = { role: 'assistant', content: res.response };
     return aiMessage;
 }
