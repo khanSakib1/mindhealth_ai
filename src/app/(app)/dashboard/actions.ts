@@ -6,6 +6,7 @@ import type { JournalEntry, MoodLog } from "@/lib/definitions";
 import { generatePersonalizedWellnessTips } from "@/ai/flows/generate-personalized-wellness-tips";
 import { generateQuoteOfTheDay } from "@/ai/flows/generate-quote-of-the-day";
 import { getStressLevelAdvice } from "@/ai/flows/get-stress-level-advice";
+import { getStressLevelFromQuiz, type QuizAnswers } from "@/ai/flows/get-stress-level-from-quiz";
 
 async function getRecentJournalEntries(userId: string, count: number): Promise<JournalEntry[]> {
   // Mocked for guest user
@@ -111,4 +112,19 @@ export async function getStressAdvice(stressLevel: number): Promise<string> {
     console.error("Failed to get stress advice:", error);
     return "Sorry, I couldn't generate advice right now. Try taking a few deep breaths.";
   }
+}
+
+export async function getStressAdviceFromQuiz(answers: QuizAnswers): Promise<{ advice: string; justification: string; stressLevel: number }> {
+    try {
+        const { stressLevel, justification } = await getStressLevelFromQuiz(answers);
+        const { advice } = await getStressLevelAdvice({ stressLevel });
+        return { advice, justification, stressLevel };
+    } catch (error) {
+        console.error("Failed to get stress advice from quiz:", error);
+        return {
+            advice: "Sorry, I couldn't generate advice right now. Try taking a few deep breaths.",
+            justification: "Could not analyze results.",
+            stressLevel: 3,
+        };
+    }
 }
