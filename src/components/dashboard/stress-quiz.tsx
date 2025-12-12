@@ -146,9 +146,9 @@ export function StressQuiz() {
                               {currentQ.answers.map(answer => (
                                 <FormItem key={answer} className="flex items-center space-x-3 space-y-0 rounded-md border p-4 hover:bg-accent has-[[data-state=checked]]:bg-primary/10 has-[[data-state=checked]]:border-primary">
                                   <FormControl>
-                                    <RadioGroupItem />
+                                    <RadioGroupItem value={answer} id={`${currentQ.id}-${answer}`} />
                                   </FormControl>
-                                  <FormLabel className="font-normal w-full cursor-pointer">{answer}</FormLabel>
+                                  <FormLabel htmlFor={`${currentQ.id}-${answer}`} className="font-normal w-full cursor-pointer">{answer}</FormLabel>
                                 </FormItem>
                               ))}
                             </RadioGroup>
