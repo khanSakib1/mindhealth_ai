@@ -1,43 +1,24 @@
+
 'use server';
 
 import { mentalWellnessConversation } from "@/ai/flows/provide-mental-wellness-conversation";
 import type { ChatMessage } from "@/lib/definitions";
-import { db } from "@/lib/firebase";
-import { collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
-// Consistent with the mock user in auth-provider
-const GUEST_USER_ID = 'guest-user';
+// Since we have no persistent database, we'll store messages in memory for the session.
+const chatHistory: ChatMessage[] = [];
 
 export async function getChatHistory(): Promise<ChatMessage[]> {
-    const chatRef = doc(db, "chat_history", GUEST_USER_ID);
-    const chatSnap = await getDoc(chatRef);
-  
-    if (chatSnap.exists()) {
-      return chatSnap.data().messages;
-    }
-    
-    return [];
+    // Return a copy of the in-memory chat history
+    return Promise.resolve([...chatHistory]);
 }
 
 export async function sendMessage(message: string): Promise<ChatMessage> {
     const userMessage: ChatMessage = { role: 'user', content: message };
+    chatHistory.push(userMessage);
     
     const res = await mentalWellnessConversation({ message });
     const aiMessage: ChatMessage = { role: 'assistant', content: res.response };
-
-    const chatRef = doc(db, "chat_history", GUEST_USER_ID);
-    const chatSnap = await getDoc(chatRef);
-
-    if (chatSnap.exists()) {
-        await updateDoc(chatRef, {
-            messages: arrayUnion(userMessage, aiMessage)
-        });
-    } else {
-        await setDoc(chatRef, {
-            userId: GUEST_USER_ID,
-            messages: [userMessage, aiMessage]
-        });
-    }
+    chatHistory.push(aiMessage);
     
     return aiMessage;
 }
