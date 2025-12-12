@@ -40,17 +40,6 @@ export default function ChatPage() {
         });
     }, []);
 
-    async function handleSendMessage(message: string): Promise<ChatMessage> {
-        const userMessage: ChatMessage = { role: 'user', content: message };
-        setMessages(prev => prev ? [...prev, userMessage] : [userMessage]);
-        
-        const aiResponse = await sendChatMessage(message);
-        
-        setMessages(prev => prev ? [...prev, aiResponse] : [aiResponse]);
-
-        return aiResponse;
-    }
-
     if (!messages) {
         return <ChatSkeleton />;
     }
