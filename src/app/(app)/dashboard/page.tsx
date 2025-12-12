@@ -50,15 +50,18 @@ export default function DashboardPage() {
       setIsLoading(true);
       getDashboardData(user.uid)
         .then(setData)
+        .catch(console.error)
         .finally(() => setIsLoading(false));
+    } else {
+        setIsLoading(false);
     }
   }, [user]);
 
-  if (isLoading || !user) {
+  if (isLoading || !user || !data) {
     return <DashboardSkeleton />;
   }
 
-  const { recentEntry, recentMood, wellnessTip, quoteOfTheDay } = data!;
+  const { recentEntry, recentMood, wellnessTip, quoteOfTheDay } = data;
 
   return (
     <div className="space-y-8">
