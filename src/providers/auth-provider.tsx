@@ -3,17 +3,17 @@
 import type { User } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// Mock user for a non-authenticated experience
-const mockUser: User = {
-  uid: 'mock-user',
-  email: 'user@example.com',
-  displayName: 'Friend',
+// Since we have no auth, we'll use a static user object.
+const guestUser: User = {
+  uid: 'guest-user', // Standardized guest ID
+  email: 'guest@example.com',
+  displayName: 'Guest',
   photoURL: null,
   emailVerified: true,
   isAnonymous: true,
   metadata: {},
   providerData: [],
-  providerId: 'mock',
+  providerId: 'anonymous',
   tenantId: null,
   delete: async () => {},
   getIdToken: async () => '',
@@ -34,11 +34,11 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(mockUser);
-  const [loading, setLoading] = useState(false);
+  // Directly provide the static guest user
+  const value = { user: guestUser, loading: false };
 
   return (
-    <AuthContext.Provider value={{ user, loading: false }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );

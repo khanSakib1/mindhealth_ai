@@ -5,7 +5,7 @@ import type { ChatMessage } from "@/lib/definitions";
 import { db } from "@/lib/firebase";
 import { collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
-// Since there is no auth, we'll use a static ID for guest users.
+// Consistent with the mock user in auth-provider
 const GUEST_USER_ID = 'guest-user';
 
 export async function getChatHistory(): Promise<ChatMessage[]> {

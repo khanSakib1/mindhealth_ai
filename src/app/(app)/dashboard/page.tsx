@@ -45,7 +45,7 @@ export default function DashboardPage() {
     }
   }, [user]);
 
-  if (!data) {
+  if (!user || !data) {
     return <DashboardSkeleton />;
   }
 
@@ -55,7 +55,7 @@ export default function DashboardPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight font-headline">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back, {user?.displayName?.split(' ')[0] || 'friend'}! Here&apos;s your wellness overview.</p>
+        <p className="text-muted-foreground">Welcome back, {user?.displayName || 'friend'}! Here&apos;s your wellness overview.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
