@@ -7,3 +7,4 @@ import '@/ai/flows/generate-personalized-wellness-tips.ts';
 import '@/ai/flows/provide-mental-wellness-conversation.ts';
 import '@/ai/flows/summarize-journal-entries.ts';
 import '@/ai/flows/generate-quote-of-the-day.ts';
+import '@/ai/flows/get-stress-level-advice.ts';

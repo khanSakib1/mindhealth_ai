@@ -5,6 +5,7 @@ import { collection, query, where, orderBy, limit, getDocs } from "firebase/fire
 import type { JournalEntry, MoodLog } from "@/lib/definitions";
 import { generatePersonalizedWellnessTips } from "@/ai/flows/generate-personalized-wellness-tips";
 import { generateQuoteOfTheDay } from "@/ai/flows/generate-quote-of-the-day";
+import { getStressLevelAdvice } from "@/ai/flows/get-stress-level-advice";
 
 async function getRecentJournalEntries(userId: string, count: number): Promise<JournalEntry[]> {
   // Mocked for guest user
@@ -100,4 +101,14 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
         wellnessTip,
         quoteOfTheDay: quoteData || { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" }
     };
+}
+
+export async function getStressAdvice(stressLevel: number): Promise<string> {
+  try {
+    const result = await getStressLevelAdvice({ stressLevel });
+    return result.advice;
+  } catch (error) {
+    console.error("Failed to get stress advice:", error);
+    return "Sorry, I couldn't generate advice right now. Try taking a few deep breaths.";
+  }
 }

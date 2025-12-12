@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BookText, HeartPulse, MessageSquare, Smile, Lightbulb, Quote } from "lucide-react";
+import { ArrowRight, BookText, HeartPulse, MessageSquare, Smile, Lightbulb, Quote, Zap, Loader2 } from "lucide-react";
 import { useAuth } from "@/providers/auth-provider";
-import { useEffect, useState } from "react";
-import { getDashboardData, type DashboardData } from "./actions";
+import { useEffect, useState, useTransition } from "react";
+import { getDashboardData, type DashboardData, getStressAdvice } from "./actions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import { cn } from "@/lib/utils";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const quickLinks = [
   { title: "Log Your Mood", href: "/mood", icon: Smile, description: "Quickly log how you're feeling today." },
@@ -37,6 +39,72 @@ function DashboardSkeleton() {
       </div>
     </div>
   );
+}
+
+function StressLevelAssessor() {
+  const [isPending, startTransition] = useTransition();
+  const [advice, setAdvice] = useState<string | null>(null);
+  const [selectedLevel, setSelectedLevel] = useState<number | null>(null);
+
+  const handleSelectLevel = (level: number) => {
+    setSelectedLevel(level);
+    setAdvice(null);
+    startTransition(async () => {
+      const newAdvice = await getStressAdvice(level);
+      setAdvice(newAdvice);
+    });
+  };
+
+  const stressLevels = [
+    { level: 1, label: "Very Low" },
+    { level: 2, label: "Low" },
+    { level: 3, label: "Medium" },
+    { level: 4, label: "High" },
+    { level: 5, label: "Very High" },
+  ];
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline flex items-center gap-2">
+          <Zap className="text-yellow-300" />
+          Quick Stress Check
+        </CardTitle>
+        <CardDescription>How are you feeling right now?</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="flex justify-between gap-2">
+          {stressLevels.map(({ level, label }) => (
+            <Button
+              key={level}
+              variant={selectedLevel === level ? "default" : "outline"}
+              size="lg"
+              className={cn(
+                "flex-1 text-lg",
+                selectedLevel === level && "ring-2 ring-primary"
+              )}
+              onClick={() => handleSelectLevel(level)}
+              disabled={isPending}
+              aria-label={`Set stress level to ${label}`}
+            >
+              {level}
+            </Button>
+          ))}
+        </div>
+        {(isPending || advice) && (
+          <Alert className="mt-4 bg-secondary/50">
+            <Lightbulb className="h-4 w-4" />
+            <AlertTitle>
+              {isPending ? "Getting your advice..." : "A quick tip for you"}
+            </AlertTitle>
+            <AlertDescription>
+              {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : advice}
+            </AlertDescription>
+          </Alert>
+        )}
+      </CardContent>
+    </Card>
+  )
 }
 
 export default function DashboardPage() {
@@ -94,6 +162,8 @@ export default function DashboardPage() {
             </CardContent>
         </Card>
       </div>
+      
+      <StressLevelAssessor />
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {quickLinks.map((item) => (
