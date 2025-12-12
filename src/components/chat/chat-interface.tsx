@@ -8,12 +8,10 @@ import type { ChatMessage } from "@/lib/definitions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Loader2, Send, Sparkles } from "lucide-react";
+import { Loader2, Send, Sparkles, User as UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useAuth } from "@/providers/auth-provider";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { ScrollArea } from "../ui/scroll-area";
-import { AppLogo } from "../icons";
 
 const chatSchema = z.object({
   message: z.string().min(1, "Message cannot be empty."),
@@ -25,7 +23,6 @@ type ChatInterfaceProps = {
 };
 
 export function ChatInterface({ initialMessages, sendMessage }: ChatInterfaceProps) {
-  const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -65,15 +62,6 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
     }
   };
   
-  const getInitials = (name?: string | null) => {
-    if (!name) return "U";
-    const names = name.split(' ');
-    if (names.length > 1) {
-      return names[0][0] + names[names.length - 1][0];
-    }
-    return name.substring(0, 2);
-  }
-
   return (
     <div className="flex flex-col h-full max-h-[calc(100vh-12rem)] bg-card rounded-lg border">
       <div className="flex-grow p-4 md:p-6 overflow-y-auto">
@@ -104,10 +92,11 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
                 >
                   <p className="text-sm">{message.content}</p>
                 </div>
-                {message.role === "user" && user && (
+                {message.role === "user" && (
                   <Avatar className="h-9 w-9">
-                    <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User"} />
-                    <AvatarFallback>{getInitials(user.displayName)}</AvatarFallback>
+                    <AvatarFallback>
+                        <UserIcon className="h-5 w-5" />
+                    </AvatarFallback>
                   </Avatar>
                 )}
               </div>

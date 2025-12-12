@@ -3,7 +3,6 @@
 import { ChatInterface } from "@/components/chat/chat-interface";
 import { getChatHistory, sendMessage as sendChatMessage } from "./actions";
 import type { ChatMessage } from "@/lib/definitions";
-import { useAuth } from "@/providers/auth-provider";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -33,30 +32,26 @@ function ChatSkeleton() {
 }
 
 export default function ChatPage() {
-    const { user } = useAuth();
     const [initialMessages, setInitialMessages] = useState<ChatMessage[] | null>(null);
 
     useEffect(() => {
-        if (user) {
-            getChatHistory(user.uid).then(history => {
-                if (history.length === 0) {
-                    setInitialMessages([{
-                        role: 'assistant',
-                        content: "Hello! I'm your AI wellness companion. How are you feeling today? Feel free to share anything on your mind."
-                    }]);
-                } else {
-                    setInitialMessages(history);
-                }
-            });
-        }
-    }, [user]);
+        getChatHistory().then(history => {
+            if (history.length === 0) {
+                setInitialMessages([{
+                    role: 'assistant',
+                    content: "Hello! I'm your AI wellness companion. How are you feeling today? Feel free to share anything on your mind."
+                }]);
+            } else {
+                setInitialMessages(history);
+            }
+        });
+    }, []);
 
     async function handleSendMessage(message: string): Promise<ChatMessage> {
-        if (!user) throw new Error("User not authenticated.");
-        return sendChatMessage(user.uid, message);
+        return sendChatMessage(message);
     }
 
-    if (!user || !initialMessages) {
+    if (!initialMessages) {
         return <ChatSkeleton />;
     }
 

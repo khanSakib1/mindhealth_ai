@@ -5,8 +5,11 @@ import type { ChatMessage } from "@/lib/definitions";
 import { db } from "@/lib/firebase";
 import { collection, doc, getDoc, setDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
-export async function getChatHistory(userId: string): Promise<ChatMessage[]> {
-    const chatRef = doc(db, "chat_history", userId);
+// Since there is no auth, we'll use a static ID for guest users.
+const GUEST_USER_ID = 'guest-user';
+
+export async function getChatHistory(): Promise<ChatMessage[]> {
+    const chatRef = doc(db, "chat_history", GUEST_USER_ID);
     const chatSnap = await getDoc(chatRef);
   
     if (chatSnap.exists()) {
@@ -16,13 +19,13 @@ export async function getChatHistory(userId: string): Promise<ChatMessage[]> {
     return [];
 }
 
-export async function sendMessage(userId: string, message: string): Promise<ChatMessage> {
+export async function sendMessage(message: string): Promise<ChatMessage> {
     const userMessage: ChatMessage = { role: 'user', content: message };
     
     const res = await mentalWellnessConversation({ message });
     const aiMessage: ChatMessage = { role: 'assistant', content: res.response };
 
-    const chatRef = doc(db, "chat_history", userId);
+    const chatRef = doc(db, "chat_history", GUEST_USER_ID);
     const chatSnap = await getDoc(chatRef);
 
     if (chatSnap.exists()) {
@@ -31,7 +34,7 @@ export async function sendMessage(userId: string, message: string): Promise<Chat
         });
     } else {
         await setDoc(chatRef, {
-            userId: userId,
+            userId: GUEST_USER_ID,
             messages: [userMessage, aiMessage]
         });
     }
