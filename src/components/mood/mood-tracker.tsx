@@ -19,6 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import type { DayProps } from "react-day-picker";
 
 const moodOptions: { mood: Mood, emoji: string, label: string, color: string }[] = [
   { mood: "great", emoji: "😄", label: "Great", color: "bg-green-300/50" },
@@ -104,7 +105,10 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
             day: "h-12 w-12 text-lg",
           }}
           components={{
-            Day: ({ date, displayMonth }) => {
+            Day: ({ date, displayMonth }: DayProps) => {
+              if (!date) {
+                return <div className="h-12 w-12"></div>;
+              }
               const dayMatch = moodDays.find(
                 (d) => d.date.toDateString() === date.toDateString() && d.date.getMonth() === displayMonth.getMonth()
               );
