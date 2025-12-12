@@ -16,6 +16,35 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// Mock Firestore for server-side
+const mockDb = {
+    collection: () => ({
+        doc: () => ({
+            get: async () => ({
+                exists: () => false,
+                data: () => ({})
+            }),
+            set: async () => {},
+            update: async () => {}
+        }),
+        add: async () => {},
+        where: () => ({
+            orderBy: () => ({
+                limit: () => ({
+                    get: async () => ({
+                        docs: []
+                    })
+                }),
+                get: async () => ({
+                    docs: []
+                })
+            })
+        })
+    })
+};
+
+const firestore = typeof window === 'undefined' ? mockDb : db;
+
 if (typeof window !== 'undefined') {
   enableIndexedDbPersistence(db)
   .catch((err) => {
@@ -31,5 +60,4 @@ if (typeof window !== 'undefined') {
   });
 }
 
-
-export { app, auth, db };
+export { app, auth, firestore as db };
