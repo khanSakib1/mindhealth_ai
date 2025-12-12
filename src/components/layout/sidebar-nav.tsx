@@ -8,7 +8,6 @@ import {
   HeartPulse,
   LayoutDashboard,
   MessageSquare,
-  Settings,
   Smile,
 } from "lucide-react";
 import { Button } from "../ui/button";
@@ -19,7 +18,6 @@ const navItems = [
   { href: "/journal", label: "Journal", icon: BookText },
   { href: "/chat", label: "AI Assistant", icon: MessageSquare },
   { href: "/exercises", label: "Exercises", icon: HeartPulse },
-  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 export function SidebarNav() {

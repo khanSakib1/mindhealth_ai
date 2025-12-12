@@ -2,8 +2,26 @@
 
 import type { User } from "firebase/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
-import { Skeleton } from "@/components/ui/skeleton";
+
+// Mock user for a non-authenticated experience
+const mockUser: User = {
+  uid: 'mock-user',
+  email: 'user@example.com',
+  displayName: 'Friend',
+  photoURL: null,
+  emailVerified: true,
+  isAnonymous: true,
+  metadata: {},
+  providerData: [],
+  providerId: 'mock',
+  tenantId: null,
+  delete: async () => {},
+  getIdToken: async () => '',
+  getIdTokenResult: async () => ({} as any),
+  reload: async () => {},
+  toJSON: () => ({}),
+};
+
 
 type AuthContextType = {
   user: User | null;
@@ -16,32 +34,11 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="flex h-screen w-full items-center justify-center">
-        <div className="w-1/3 space-y-4">
-          <Skeleton className="h-12 w-full" />
-          <Skeleton className="h-24 w-full" />
-          <Skeleton className="h-24 w-full" />
-        </div>
-      </div>
-    );
-  }
+  const [user, setUser] = useState<User | null>(mockUser);
+  const [loading, setLoading] = useState(false);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider value={{ user, loading: false }}>
       {children}
     </AuthContext.Provider>
   );

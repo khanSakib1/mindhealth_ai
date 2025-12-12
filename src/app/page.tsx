@@ -44,11 +44,8 @@ export default function LandingPage() {
           <span className="text-xl font-bold">MindfulJourney</span>
         </Link>
         <div className="flex items-center gap-4">
-          <Button variant="ghost" asChild>
-            <Link href="/login">Log In</Link>
-          </Button>
           <Button asChild>
-            <Link href="/login">Get Started</Link>
+            <Link href="/dashboard">Get Started</Link>
           </Button>
         </div>
       </header>
@@ -78,7 +75,7 @@ export default function LandingPage() {
               </p>
               <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Button size="lg" asChild>
-                  <Link href="/login">Start for Free</Link>
+                  <Link href="/dashboard">Start for Free</Link>
                 </Button>
               </div>
             </div>
