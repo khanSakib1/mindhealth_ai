@@ -37,10 +37,10 @@ export function BreathingExercise() {
     <div className="flex flex-col items-center justify-center p-8 bg-card rounded-lg border h-96">
       <div className="relative w-64 h-64 flex items-center justify-center">
         <div
-          className={`absolute w-full h-full bg-gradient-to-br from-primary to-accent rounded-full opacity-30 ${isAnimating ? currentCycle.animation : ''}`}
+          className={`absolute w-full h-full bg-gradient-to-br from-primary/50 to-primary/20 rounded-full ${isAnimating ? currentCycle.animation : ''}`}
         />
         <div
-          className={`w-48 h-48 bg-background rounded-full flex items-center justify-center transition-transform duration-1000 ${isAnimating ? currentCycle.animation : ''}`}
+          className={`w-48 h-48 bg-background rounded-full flex items-center justify-center shadow-2xl transition-transform duration-1000 ${isAnimating ? currentCycle.animation : ''}`}
         >
           <span className="text-2xl font-medium text-foreground">
             {isAnimating ? currentCycle.text : 'Ready?'}

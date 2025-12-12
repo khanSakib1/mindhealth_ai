@@ -60,20 +60,20 @@ export default function DashboardPage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {quickLinks.map((item) => (
-          <Card key={item.title} className="flex flex-col transition-shadow hover:shadow-md">
+          <Card key={item.title} className="flex flex-col transition-all duration-300 hover:shadow-lg hover:border-primary/50 hover:-translate-y-1 bg-card/50">
             <CardHeader>
               <div className="flex items-center gap-4">
-                <div className="p-3 rounded-full bg-primary/20">
-                  <item.icon className="w-6 h-6 text-primary-foreground/80" />
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <item.icon className="w-6 h-6 text-primary" />
                 </div>
-                <CardTitle className="font-headline">{item.title}</CardTitle>
+                <CardTitle className="font-headline text-lg">{item.title}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="flex-grow">
               <CardDescription>{item.description}</CardDescription>
             </CardContent>
             <div className="p-6 pt-0">
-              <Button asChild variant="outline" className="w-full">
+              <Button asChild variant="secondary" className="w-full">
                 <Link href={item.href}>
                   Go to {item.title.split(' ')[0]} <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -91,35 +91,35 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent className="space-y-4">
                 {recentMood ? (
-                  <div className="p-4 rounded-md bg-secondary/50">
+                  <div className="p-4 rounded-md bg-secondary">
                     <p className="text-sm text-muted-foreground">Latest mood from {format(new Date(recentMood.date), "MMM d")}: <span className="font-semibold capitalize text-foreground">{recentMood.mood}</span></p>
                   </div>
                 ) : (
-                  <div className="p-4 text-center rounded-md bg-secondary/50">
+                  <div className="p-4 text-center rounded-md bg-secondary">
                     <p className="text-sm text-muted-foreground">No recent mood logs.</p>
                   </div>
                 )}
                 {recentEntry ? (
-                  <div className="p-4 rounded-md bg-secondary/50">
+                  <div className="p-4 rounded-md bg-secondary">
                     <p className="text-sm text-muted-foreground">Latest journal entry:</p>
                     <Link href="/journal" className="font-semibold text-foreground hover:underline">{recentEntry.title}</Link>
                     <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{recentEntry.content}</p>
                   </div>
                 ) : (
-                  <div className="p-4 text-center rounded-md bg-secondary/50">
+                  <div className="p-4 text-center rounded-md bg-secondary">
                     <p className="text-sm text-muted-foreground">No recent journal entries.</p>
                   </div>
                 )}
             </CardContent>
         </Card>
-        <Card className="bg-accent/20 border-accent/50">
+        <Card className="bg-gradient-to-br from-primary/30 to-primary/10 border-primary/20">
             <CardHeader>
-                <CardTitle className="font-headline flex items-center gap-2"><Lightbulb /> Wellness Tip</CardTitle>
+                <CardTitle className="font-headline flex items-center gap-2"><Lightbulb className="text-yellow-300" /> Wellness Tip</CardTitle>
                 <CardDescription>A personalized tip from your AI assistant.</CardDescription>
             </CardHeader>
             <CardContent>
-                <div className="p-6 rounded-md bg-background/50">
-                    <p className="text-center text-accent-foreground/90">
+                <div className="p-6 rounded-md bg-background/50 shadow-inner">
+                    <p className="text-center text-lg text-foreground/90">
                         &quot;{wellnessTip}&quot;
                     </p>
                 </div>

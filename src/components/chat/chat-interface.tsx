@@ -63,7 +63,7 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
   };
   
   return (
-    <div className="flex flex-col h-full max-h-[calc(100vh-12rem)] bg-card rounded-lg border">
+    <div className="flex flex-col h-full max-h-[calc(100vh-12rem)] bg-card/50 rounded-lg border">
       <div className="flex-grow p-4 md:p-6 overflow-y-auto">
         <ScrollArea className="h-full" ref={scrollAreaRef}>
           <div className="space-y-6 pr-4">
@@ -84,9 +84,9 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
                 )}
                 <div
                   className={cn(
-                    "max-w-md rounded-lg px-4 py-3",
+                    "max-w-md rounded-lg px-4 py-3 shadow-md",
                     message.role === "user"
-                      ? "bg-primary/80 text-primary-foreground rounded-br-none"
+                      ? "bg-primary text-primary-foreground rounded-br-none"
                       : "bg-secondary rounded-bl-none"
                   )}
                 >
@@ -94,7 +94,7 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
                 </div>
                 {message.role === "user" && (
                   <Avatar className="h-9 w-9">
-                    <AvatarFallback>
+                    <AvatarFallback className="bg-secondary">
                         <UserIcon className="h-5 w-5" />
                     </AvatarFallback>
                   </Avatar>
@@ -116,7 +116,7 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
           </div>
         </ScrollArea>
       </div>
-      <div className="border-t p-4 bg-background rounded-b-lg">
+      <div className="border-t p-4 bg-background/80 backdrop-blur-sm rounded-b-lg">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center gap-4">
             <FormField

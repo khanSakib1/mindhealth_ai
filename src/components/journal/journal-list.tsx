@@ -178,7 +178,7 @@ export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentimen
 
       {(aiResult || isAiLoading) && (
         <Alert className="mb-6 bg-primary/10 border-primary/20">
-          <Sparkles className="h-4 w-4 text-primary-foreground/80" />
+          <Sparkles className="h-4 w-4 text-primary" />
           <AlertTitle className="font-headline">{isAiLoading ? "AI is thinking..." : aiResult?.title}</AlertTitle>
           <AlertDescription>
             {isAiLoading ? <p>Please wait a moment.</p> : aiResult?.content}
@@ -195,7 +195,7 @@ export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentimen
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {entries.map((entry) => (
-            <Card key={entry.id} className="flex flex-col">
+            <Card key={entry.id} className="flex flex-col bg-card/50 hover:border-primary/30 transition-colors">
               <CardHeader>
                 <CardTitle className="truncate font-headline">{entry.title}</CardTitle>
                 <CardDescription>{format(new Date(entry.date), "MMMM d, yyyy")}</CardDescription>

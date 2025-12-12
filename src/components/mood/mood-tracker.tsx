@@ -21,13 +21,14 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import type { DayProps } from "react-day-picker";
 
-const moodOptions: { mood: Mood, emoji: string, label: string, color: string }[] = [
-  { mood: "great", emoji: "😄", label: "Great", color: "bg-green-300/50" },
-  { mood: "good", emoji: "🙂", label: "Good", color: "bg-lime-300/50" },
-  { mood: "neutral", emoji: "😐", label: "Neutral", color: "bg-yellow-300/50" },
-  { mood: "bad", emoji: "😟", label: "Bad", color: "bg-orange-300/50" },
-  { mood: "awful", emoji: "😭", label: "Awful", color: "bg-red-300/50" },
+const moodOptions: { mood: Mood, emoji: string, label: string, color: string, textColor: string }[] = [
+  { mood: "great", emoji: "😄", label: "Great", color: "bg-green-500/20", textColor: "text-green-300" },
+  { mood: "good", emoji: "🙂", label: "Good", color: "bg-lime-500/20", textColor: "text-lime-300" },
+  { mood: "neutral", emoji: "😐", label: "Neutral", color: "bg-yellow-500/20", textColor: "text-yellow-300" },
+  { mood: "bad", emoji: "😟", label: "Bad", color: "bg-orange-500/20", textColor: "text-orange-300" },
+  { mood: "awful", emoji: "😭", label: "Awful", color: "bg-red-500/20", textColor: "text-red-300" },
 ];
+
 
 const formSchema = z.object({
   mood: z.custom<Mood>((val) => moodOptions.map(m => m.mood).includes(val as Mood), {
@@ -123,7 +124,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
                       </div>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p className="font-bold">{moodInfo?.label}</p>
+                      <p className={cn('font-bold', moodInfo?.textColor)}>{moodInfo?.label}</p>
                       {dayMatch.notes && <p className="text-sm text-muted-foreground">{dayMatch.notes}</p>}
                     </TooltipContent>
                   </Tooltip>
@@ -142,7 +143,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
     <div className="space-y-8">
       {(analysis || isAiLoading) && (
         <Alert className="bg-primary/10 border-primary/20">
-          <Sparkles className="h-4 w-4 text-primary-foreground/80" />
+          <Sparkles className="h-4 w-4 text-primary" />
           <AlertTitle className="font-headline">{isAiLoading ? "AI is analyzing your patterns..." : "Your Mood Analysis"}</AlertTitle>
           <AlertDescription>
             {isAiLoading ? <p>Please wait a moment.</p> : analysis}
@@ -177,8 +178,8 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
                                           setSelectedMood(mood);
                                       }}
                                       className={cn(
-                                          "flex-1 p-3 rounded-lg border-2 transition-transform transform hover:scale-105",
-                                          selectedMood === mood ? "border-primary scale-105 bg-primary/10" : "border-transparent bg-secondary"
+                                          "flex-1 p-3 rounded-lg border-2 transition-transform transform hover:scale-110 hover:-translate-y-1",
+                                          selectedMood === mood ? "border-primary scale-105 bg-primary/20" : "border-transparent bg-secondary"
                                       )}
                                       >
                                       <span className="text-4xl">{emoji}</span>

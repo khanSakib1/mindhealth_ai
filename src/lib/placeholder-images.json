@@ -2,33 +2,33 @@
   "placeholderImages": [
     {
       "id": "hero",
-      "description": "A serene landscape with a person meditating at sunrise.",
-      "imageUrl": "https://images.unsplash.com/photo-1641391400871-3a6578a11d5a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8c2VyZW5lJTIwbWVkaXRhdGlvbnxlbnwwfHx8fDE3NjU1MTg2ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "serene meditation"
+      "description": "Abstract background with glowing neural network connections.",
+      "imageUrl": "https://images.unsplash.com/photo-1539627831859-a911cf04d3cd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxhYnN0cmFjdCUyMGRhcmslMjBnbG93aW5nJTIwbGluZXN8ZW58MHx8fHwxNzY1NTI4MjA0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract glowing"
     },
     {
       "id": "chat",
-      "description": "Two abstract speech bubbles representing a conversation.",
-      "imageUrl": "https://images.unsplash.com/photo-1641122164135-c58019a13863?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb252ZXJzYXRpb24lMjBhYnN0cmFjdHxlbnwwfHx8fDE3NjU1MTg2ODJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "conversation abstract"
+      "description": "A calm and minimalist chat interface illustration.",
+      "imageUrl": "https://images.unsplash.com/photo-1589793463329-8732db485a6a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxtaW5pbWFsaXN0JTIwY2hhdCUyMGludGVyZmFjZXxlbnwwfHx8fDE3NjU1MjgzMTB8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "minimalist chat"
     },
     {
       "id": "journal",
-      "description": "An open journal with a pen on a wooden desk.",
-      "imageUrl": "https://images.unsplash.com/photo-1676287569499-62bb892d67d8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxqb3VybmFsJTIwZGVza3xlbnwwfHx8fDE3NjU1MTg2ODN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "journal desk"
+      "description": "A stylish, dark-themed photo of a person writing in a journal.",
+      "imageUrl": "https://images.unsplash.com/photo-1517996996391-3a059a43a0e6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3cml0aW5nJTIwaW4lMjBqb3VybmFsJTIwZGFya3xlbnwwfHx8fDE3NjU1MjgzMjR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "writing journal"
     },
     {
       "id": "mood",
-      "description": "A collection of colorful emoji representing different moods.",
-      "imageUrl": "https://images.unsplash.com/photo-1736950840681-decf3262aa8a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtb29kJTIwZW1vaml8ZW58MHx8fHwxNzY1NTE4NjgzfDA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "mood emoji"
+      "description": "An abstract representation of emotions with colorful gradients.",
+      "imageUrl": "https://images.unsplash.com/photo-1542437624-99933809c953?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxhYnN0cmFjdCUyMGVtb3Rpb25zfGVufDB8fHx8MTc2NTUyODMzN3ww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "abstract emotions"
     },
     {
       "id": "exercises",
-      "description": "A person doing a yoga pose in a calm, natural setting.",
-      "imageUrl": "https://images.unsplash.com/photo-1608405059861-b21a68ae76a2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHx5b2dhJTIwbmF0dXJlfGVufDB8fHx8MTc2NTUxODY4Mnww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "yoga nature"
+      "description": "Silhouette of a person meditating against a cosmic, starry background.",
+      "imageUrl": "https://images.unsplash.com/photo-1506126613408-4e61f3d3d18d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxtZWRpdGF0aW9uJTIwc2lsb3VldHRlJTIwc3RhcnN8ZW58MHx8fHwxNzY1NTI4MzQ5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "meditation stars"
     }
   ]
 }

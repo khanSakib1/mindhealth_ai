@@ -2,11 +2,24 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from "@/providers/auth-provider";
 import { Toaster } from "@/components/ui/toaster";
+import { Inter, Poppins } from 'next/font/google';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'MindfulJourney',
   description: 'Your AI-Powered Mental Health Companion',
 };
+
+const fontBody = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-body',
+});
+
+const fontHeadline = Poppins({
+  subsets: ['latin'],
+  weight: ['600', '700'],
+  variable: '--font-headline',
+});
 
 export default function RootLayout({
   children,
@@ -14,13 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </head>
-      <body className="font-body antialiased">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={cn("font-body antialiased", fontBody.variable, fontHeadline.variable)}>
         <AuthProvider>
           {children}
           <Toaster />
