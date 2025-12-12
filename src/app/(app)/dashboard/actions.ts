@@ -4,8 +4,13 @@ import { db } from "@/lib/firebase";
 import { collection, query, where, orderBy, limit, getDocs } from "firebase/firestore";
 import type { JournalEntry, MoodLog } from "@/lib/definitions";
 import { generatePersonalizedWellnessTips } from "@/ai/flows/generate-personalized-wellness-tips";
+import { generateQuoteOfTheDay } from "@/ai/flows/generate-quote-of-the-day";
 
 async function getRecentJournalEntries(userId: string, count: number): Promise<JournalEntry[]> {
+  // Mocked for guest user
+  if (userId === 'guest-user') {
+    return Promise.resolve([]);
+  }
   const q = query(
     collection(db, "journal_entries"),
     where("userId", "==", userId),
@@ -27,6 +32,10 @@ async function getRecentJournalEntries(userId: string, count: number): Promise<J
 }
 
 async function getRecentMoodLogs(userId: string, count: number): Promise<MoodLog[]> {
+   // Mocked for guest user
+  if (userId === 'guest-user') {
+    return Promise.resolve([]);
+  }
   const q = query(
     collection(db, "mood_logs"),
     where("userId", "==", userId),
@@ -49,12 +58,17 @@ export type DashboardData = {
   recentEntry: JournalEntry | null;
   recentMood: MoodLog | null;
   wellnessTip: string;
+  quoteOfTheDay: {
+    quote: string;
+    author: string;
+  }
 }
 
 export async function getDashboardData(userId: string): Promise<DashboardData> {
-    const [journalEntries, moodLogs] = await Promise.all([
+    const [journalEntries, moodLogs, quoteData] = await Promise.all([
         getRecentJournalEntries(userId, 1),
-        getRecentMoodLogs(userId, 1)
+        getRecentMoodLogs(userId, 1),
+        generateQuoteOfTheDay({ category: "mindfulness" })
     ]);
 
     const recentEntry = journalEntries.length > 0 ? journalEntries[0] : null;
@@ -83,6 +97,7 @@ export async function getDashboardData(userId: string): Promise<DashboardData> {
     return {
         recentEntry,
         recentMood,
-        wellnessTip
+        wellnessTip,
+        quoteOfTheDay: quoteData || { quote: "The best way to predict the future is to create it.", author: "Peter Drucker" }
     };
 }
