@@ -90,6 +90,10 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
   }
 
   const MoodCalendar = () => {
+    if (!moodLogs) {
+        return null; // Don't render calendar if logs are not yet available
+    }
+
     const moodDays = moodLogs.map(log => ({
         date: new Date(log.date + 'T00:00:00'), // ensure correct date parsing
         mood: log.mood,
@@ -228,7 +232,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
                   <MoodCalendar />
               </CardContent>
               <CardFooter>
-                  <Button variant="outline" onClick={handleAnalyze} disabled={isAiLoading || moodLogs.length < 3}>
+                  <Button variant="outline" onClick={handleAnalyze} disabled={isAiLoading || !moodLogs || moodLogs.length < 3}>
                       <BrainCircuit className="mr-2 h-4 w-4" />
                       {isAiLoading ? "Analyzing..." : "Analyze Patterns with AI"}
                   </Button>
