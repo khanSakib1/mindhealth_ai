@@ -10,29 +10,6 @@
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const quizQuestions = [
-  {
-    id: 'sleep',
-    question: 'How have you been sleeping lately?',
-    answers: ['Very well', 'Okay', 'Poorly'],
-  },
-  {
-    id: 'workload',
-    question: 'How would you describe your current workload or daily demands?',
-    answers: ['Manageable', 'Busy', 'Overwhelming'],
-  },
-  {
-    id: 'mood',
-    question: 'How often have you felt irritable or anxious this week?',
-    answers: ['Rarely', 'Sometimes', 'Frequently'],
-  },
-  {
-    id: 'relaxation',
-    question: 'Are you making time for relaxation or hobbies?',
-    answers: ['Plenty of time', 'A little, but not enough', 'Almost none'],
-  },
-];
-
 const answersSchema = z.object({
   sleep: z.enum(['Very well', 'Okay', 'Poorly']),
   workload: z.enum(['Manageable', 'Busy', 'Overwhelming']),

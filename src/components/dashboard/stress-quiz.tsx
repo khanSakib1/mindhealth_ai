@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { quizQuestions, type QuizAnswers } from '@/ai/flows/get-stress-level-from-quiz';
+import type { QuizAnswers } from '@/ai/flows/get-stress-level-from-quiz';
 import { getStressAdviceFromQuiz } from '@/app/(app)/dashboard/actions';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,29 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Loader2, Zap, Sparkles, Activity } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Progress } from '../ui/progress';
+
+export const quizQuestions = [
+  {
+    id: 'sleep',
+    question: 'How have you been sleeping lately?',
+    answers: ['Very well', 'Okay', 'Poorly'],
+  },
+  {
+    id: 'workload',
+    question: 'How would you describe your current workload or daily demands?',
+    answers: ['Manageable', 'Busy', 'Overwhelming'],
+  },
+  {
+    id: 'mood',
+    question: 'How often have you felt irritable or anxious this week?',
+    answers: ['Rarely', 'Sometimes', 'Frequently'],
+  },
+  {
+    id: 'relaxation',
+    question: 'Are you making time for relaxation or hobbies?',
+    answers: ['Plenty of time', 'A little, but not enough', 'Almost none'],
+  },
+];
 
 
 const formSchema = z.object({
