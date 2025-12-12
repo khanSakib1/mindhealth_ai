@@ -12,6 +12,17 @@ const formSchema = z.object({
 });
 
 export async function getMoodLogs(userId: string): Promise<MoodLog[]> {
+  // Mock for guest user
+  if (userId === 'guest-user') {
+    const today = new Date();
+    const mockLogs: MoodLog[] = [
+      { id: '1', mood: 'good', date: new Date(today.setDate(today.getDate() - 1)).toISOString().split('T')[0], userId: 'guest-user', createdAt: new Date() as any },
+      { id: '2', mood: 'neutral', date: new Date(today.setDate(today.getDate() - 2)).toISOString().split('T')[0], notes: 'A bit tired', userId: 'guest-user', createdAt: new Date() as any },
+      { id: '3', mood: 'great', date: new Date(today.setDate(today.getDate() - 4)).toISOString().split('T')[0], userId: 'guest-user', createdAt: new Date() as any },
+    ];
+    return Promise.resolve(mockLogs);
+  }
+
   const q = query(
     collection(db, "mood_logs"),
     where("userId", "==", userId),
@@ -24,12 +35,17 @@ export async function getMoodLogs(userId: string): Promise<MoodLog[]> {
     return {
       id: doc.id,
       ...data,
-      date: new Date(data.date).toISOString().split('T')[0], // Ensure date is in YYYY-MM-DD format
+      date: data.date, // Already in YYYY-MM-DD
     } as MoodLog;
   });
 }
 
 export async function addMoodLog(userId: string, values: z.infer<typeof formSchema>) {
+    if (userId === 'guest-user') {
+      // Prevent adding logs for guest user in this mock setup
+      console.log("Guest user tried to add a mood log.");
+      return;
+    }
     const today = new Date().toISOString().split('T')[0];
 
     await addDoc(collection(db, "mood_logs"), {

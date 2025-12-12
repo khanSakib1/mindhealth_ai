@@ -58,27 +58,25 @@ function MoodSkeleton() {
 export default function MoodPage() {
   const { user } = useAuth();
   const [moodLogs, setMoodLogs] = useState<MoodLog[] | null>(null);
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchMoodLogs = () => {
     if (user) {
-      setMoodLogs(null);
-      getMoodLogs(user.uid).then(setMoodLogs);
+      setIsLoading(true);
+      getMoodLogs(user.uid).then(setMoodLogs).finally(() => setIsLoading(false));
     }
   };
 
   useEffect(() => {
     if(user) {
-      getMoodLogs(user.uid).then(setMoodLogs);
+      fetchMoodLogs();
     }
   }, [user]);
 
   const handleAddMoodLog = async (values: z.infer<typeof formSchema>) => {
     if (!user) throw new Error("User not authenticated");
     await addMoodLog(user.uid, values);
-    startTransition(() => {
-      fetchMoodLogs();
-    });
+    fetchMoodLogs(); // Refreshes logs after adding a new one
   };
 
   const handleAnalyzePatterns = async () => {
@@ -86,7 +84,7 @@ export default function MoodPage() {
     return analyzePatterns(user.uid, moodLogs);
   }
 
-  if (!user || moodLogs === null) {
+  if (isLoading || !moodLogs) {
     return <MoodSkeleton />;
   }
 

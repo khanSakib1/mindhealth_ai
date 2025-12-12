@@ -45,7 +45,7 @@ type MoodTrackerProps = {
 
 export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrackerProps) {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null);
@@ -56,7 +56,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsLoading(true);
+    setIsSubmitting(true);
     try {
       await addMoodLog(values);
       toast({
@@ -72,7 +72,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -90,12 +90,8 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
   }
 
   const MoodCalendar = () => {
-    if (!moodLogs) {
-        return null; // Don't render calendar if logs are not yet available
-    }
-
     const moodDays = moodLogs.map(log => ({
-        date: new Date(log.date + 'T00:00:00'), // ensure correct date parsing
+        date: new Date(log.date.replace(/-/g, '/')), // Use / to avoid timezone issues
         mood: log.mood,
         notes: log.notes
     }));
@@ -111,7 +107,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
           }}
           components={{
             Day: ({ date, displayMonth }: DayProps) => {
-              if (!date) {
+              if (!date || !displayMonth) {
                 return <div className="h-12 w-12"></div>;
               }
               const dayMatch = moodDays.find(
@@ -214,8 +210,8 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
                       </FormItem>
                       )}
                   />
-                  <Button type="submit" disabled={isLoading} className="w-full">
-                      {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  <Button type="submit" disabled={isSubmitting} className="w-full">
+                      {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Log Mood
                   </Button>
                   </form>
