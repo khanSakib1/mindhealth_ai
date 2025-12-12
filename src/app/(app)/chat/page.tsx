@@ -1,7 +1,7 @@
 "use client";
 
 import { ChatInterface } from "@/components/chat/chat-interface";
-import { getChatHistory, sendMessage as sendChatMessage } from "./actions";
+import { getInitialMessage, sendMessage as sendChatMessage } from "./actions";
 import type { ChatMessage } from "@/lib/definitions";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,26 +32,26 @@ function ChatSkeleton() {
 }
 
 export default function ChatPage() {
-    const [initialMessages, setInitialMessages] = useState<ChatMessage[] | null>(null);
+    const [messages, setMessages] = useState<ChatMessage[] | null>(null);
 
     useEffect(() => {
-        getChatHistory().then(history => {
-            if (history.length === 0) {
-                setInitialMessages([{
-                    role: 'assistant',
-                    content: "Hello! I'm your AI wellness companion. How are you feeling today? Feel free to share anything on your mind."
-                }]);
-            } else {
-                setInitialMessages(history);
-            }
+        getInitialMessage().then(initialMsg => {
+            setMessages([initialMsg]);
         });
     }, []);
 
     async function handleSendMessage(message: string): Promise<ChatMessage> {
-        return sendChatMessage(message);
+        const userMessage: ChatMessage = { role: 'user', content: message };
+        setMessages(prev => prev ? [...prev, userMessage] : [userMessage]);
+        
+        const aiResponse = await sendChatMessage(message);
+        
+        setMessages(prev => prev ? [...prev, aiResponse] : [aiResponse]);
+
+        return aiResponse;
     }
 
-    if (!initialMessages) {
+    if (!messages) {
         return <ChatSkeleton />;
     }
 
@@ -62,7 +62,11 @@ export default function ChatPage() {
                 <p className="text-muted-foreground">Your confidential space to talk and reflect.</p>
             </div>
             <div className="flex-grow">
-                <ChatInterface initialMessages={initialMessages} sendMessage={handleSendMessage} />
+                <ChatInterface 
+                    messages={messages} 
+                    setMessages={setMessages}
+                    sendMessage={sendChatMessage} 
+                />
             </div>
         </div>
     );

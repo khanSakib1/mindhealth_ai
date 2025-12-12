@@ -18,12 +18,12 @@ const chatSchema = z.object({
 });
 
 type ChatInterfaceProps = {
-  initialMessages: ChatMessage[];
+  messages: ChatMessage[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[] | null>>;
   sendMessage: (message: string) => Promise<ChatMessage>;
 };
 
-export function ChatInterface({ initialMessages, sendMessage }: ChatInterfaceProps) {
-  const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
+export function ChatInterface({ messages, setMessages, sendMessage }: ChatInterfaceProps) {
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
@@ -47,16 +47,16 @@ export function ChatInterface({ initialMessages, sendMessage }: ChatInterfacePro
 
   const onSubmit = async (values: z.infer<typeof chatSchema>) => {
     const userMessage: ChatMessage = { role: "user", content: values.message };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...(prev || []), userMessage]);
     setIsLoading(true);
     form.reset();
 
     try {
       const aiResponse = await sendMessage(values.message);
-      setMessages((prev) => [...prev, aiResponse]);
+      setMessages((prev) => [...(prev || []), aiResponse]);
     } catch (error) {
       const errorMessage: ChatMessage = { role: "assistant", content: "Sorry, I couldn't get a response. Please try again." };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => [...(prev || []), errorMessage]);
     } finally {
       setIsLoading(false);
     }
