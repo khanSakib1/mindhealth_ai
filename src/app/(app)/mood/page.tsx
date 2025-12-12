@@ -31,7 +31,7 @@ function MoodSkeleton() {
             <div className="space-y-2">
               <Skeleton className="h-5 w-1/3" />
               <div className="flex justify-between gap-2">
-                {[...Array(5)].map(i => <Skeleton key={i} className="h-20 w-20 rounded-lg" />)}
+                {[...Array(5)].map((_, i) => <Skeleton key={i} className="h-20 w-20 rounded-lg" />)}
               </div>
             </div>
             <div className="space-y-2">
