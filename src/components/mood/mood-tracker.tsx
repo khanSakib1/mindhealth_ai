@@ -19,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import type { DayProps } from "react-day-picker";
+import { DayPicker, type DayProps } from "react-day-picker";
 
 const moodOptions: { mood: Mood, emoji: string, label: string, color: string, textColor: string }[] = [
   { mood: "great", emoji: "😄", label: "Great", color: "bg-green-500/20", textColor: "text-green-300" },
@@ -108,7 +108,7 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
           components={{
             Day: ({ date, displayMonth }: DayProps) => {
               if (!date || !displayMonth) {
-                return <div className="h-12 w-12"></div>;
+                return <td role="gridcell" className="h-12 w-12"></td>;
               }
               const dayMatch = moodDays.find(
                 (d) => d.date.toDateString() === date.toDateString() && d.date.getMonth() === displayMonth.getMonth()
@@ -117,21 +117,23 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
               if (dayMatch) {
                 const moodInfo = moodOptions.find(m => m.mood === dayMatch.mood);
                 return (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className={cn(`relative flex h-12 w-12 items-center justify-center rounded-md`, moodInfo?.color)}>
-                        <span className="text-2xl">{moodInfo?.emoji}</span>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className={cn('font-bold', moodInfo?.textColor)}>{moodInfo?.label}</p>
-                      {dayMatch.notes && <p className="text-sm text-muted-foreground">{dayMatch.notes}</p>}
-                    </TooltipContent>
-                  </Tooltip>
+                  <td role="gridcell">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className={cn(`relative flex h-12 w-12 items-center justify-center rounded-md`, moodInfo?.color)}>
+                          <span className="text-2xl">{moodInfo?.emoji}</span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className={cn('font-bold', moodInfo?.textColor)}>{moodInfo?.label}</p>
+                        {dayMatch.notes && <p className="text-sm text-muted-foreground">{dayMatch.notes}</p>}
+                      </TooltipContent>
+                    </Tooltip>
+                  </td>
                 );
               }
               
-              return <div className="h-12 w-12 flex items-center justify-center text-muted-foreground/50">{date.getDate()}</div>;
+              return <td role="gridcell"><div className="h-12 w-12 flex items-center justify-center text-muted-foreground/50">{date.getDate()}</div></td>;
             },
           }}
         />
