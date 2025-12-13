@@ -158,8 +158,8 @@ export function MoodTracker({ moodLogs }: MoodTrackerProps) {
           </AlertDescription>
         </Alert>
       )}
-      <div className="grid gap-8 lg:grid-cols-3">
-          <Card className="lg:col-span-1">
+      <div className="grid grid-cols-1 gap-8">
+          <Card>
               <CardHeader>
               <CardTitle className="font-headline">How are you feeling today?</CardTitle>
               <CardDescription>Select a mood and add some notes if you like.</CardDescription>
@@ -174,7 +174,7 @@ export function MoodTracker({ moodLogs }: MoodTrackerProps) {
                       <FormItem>
                           <FormLabel>Select your mood</FormLabel>
                           <FormControl>
-                          <div className="grid grid-cols-5 gap-2">
+                          <div className="grid grid-cols-5 gap-2 md:gap-4">
                               {moodOptions.map(({ mood, emoji, label }) => (
                               <TooltipProvider key={mood} delayDuration={100}>
                                   <Tooltip>
@@ -227,7 +227,7 @@ export function MoodTracker({ moodLogs }: MoodTrackerProps) {
               </CardContent>
           </Card>
 
-          <Card className="lg:col-span-2">
+          <Card>
               <CardHeader>
                   <CardTitle className="font-headline">Your Mood History</CardTitle>
                   <CardDescription>See your mood progression over the month.</CardDescription>
