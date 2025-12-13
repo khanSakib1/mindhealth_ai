@@ -8,9 +8,9 @@ import type { ChatMessage } from "@/lib/definitions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Loader2, Send, Sparkles, User as UserIcon } from "lucide-react";
+import { Loader2, Send, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Avatar } from "../ui/avatar";
 import { ScrollArea } from "../ui/scroll-area";
 
 const chatSchema = z.object({
@@ -90,13 +90,6 @@ export function ChatInterface({ messages, setMessages, sendMessage }: ChatInterf
                 >
                   <p className="text-sm">{message.content}</p>
                 </div>
-                {message.role === "user" && (
-                  <Avatar className="h-9 w-9">
-                    <AvatarFallback className="bg-secondary">
-                        <UserIcon className="h-5 w-5" />
-                    </AvatarFallback>
-                  </Avatar>
-                )}
               </div>
             ))}
             {isLoading && (
