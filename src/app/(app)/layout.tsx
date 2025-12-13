@@ -4,6 +4,7 @@ import { SidebarNav } from "@/components/layout/sidebar-nav";
 import Link from "next/link";
 import { AppLogo } from "@/components/icons";
 import { MobileSidebar } from "@/components/layout/mobile-sidebar";
+import { UserNav } from "@/components/layout/user-nav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,6 +21,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col">
         <header className="flex h-16 items-center justify-between md:justify-end border-b px-4 lg:px-6 bg-card/50 backdrop-blur-sm">
           <MobileSidebar />
+          <div className="flex items-center gap-4">
+            
+          </div>
         </header>
         <main className="flex-1 p-4 md:p-8 lg:p-10">
             {children}
