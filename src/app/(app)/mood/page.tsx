@@ -1,22 +1,13 @@
-"use client";
 
 import { MoodTracker } from "@/components/mood/mood-tracker";
-import type { MoodLog } from "@/lib/definitions";
-import { addMoodLog, getMoodLogs, analyzePatterns } from "./actions";
-import { z } from "zod";
-import { useAuth } from "@/providers/auth-provider";
-import { useEffect, useState, useTransition } from "react";
+import { getMoodLogs } from "./actions";
+import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
-const formSchema = z.object({
-  mood: z.enum(["great", "good", "neutral", "bad", "awful"]),
-  notes: z.string().max(500).optional(),
-});
-
 function MoodSkeleton() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 animate-pulse">
       <div>
         <Skeleton className="h-9 w-48 mb-2" />
         <Skeleton className="h-5 w-80" />
@@ -55,50 +46,23 @@ function MoodSkeleton() {
   )
 }
 
+async function MoodTrackerContent() {
+  // Hardcoded guest user
+  const moodLogs = await getMoodLogs('guest-user');
+
+  return <MoodTracker moodLogs={moodLogs} />;
+}
+
 export default function MoodPage() {
-  const { user } = useAuth();
-  const [moodLogs, setMoodLogs] = useState<MoodLog[] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchMoodLogs = () => {
-    if (user) {
-      setIsLoading(true);
-      getMoodLogs(user.uid).then(setMoodLogs).finally(() => setIsLoading(false));
-    }
-  };
-
-  useEffect(() => {
-    if(user) {
-      fetchMoodLogs();
-    }
-  }, [user]);
-
-  const handleAddMoodLog = async (values: z.infer<typeof formSchema>) => {
-    if (!user) throw new Error("User not authenticated");
-    await addMoodLog(user.uid, values);
-    fetchMoodLogs(); // Refreshes logs after adding a new one
-  };
-
-  const handleAnalyzePatterns = async () => {
-    if (!user || !moodLogs) throw new Error("Missing user or mood logs");
-    return analyzePatterns(user.uid, moodLogs);
-  }
-
-  if (isLoading || !moodLogs) {
-    return <MoodSkeleton />;
-  }
-
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight font-headline">Mood Tracker</h1>
         <p className="text-muted-foreground">Monitor and understand your emotional well-being.</p>
       </div>
-      <MoodTracker 
-        addMoodLog={handleAddMoodLog} 
-        moodLogs={moodLogs}
-        analyzePatterns={handleAnalyzePatterns} 
-      />
+      <Suspense fallback={<MoodSkeleton />}>
+        <MoodTrackerContent />
+      </Suspense>
     </div>
   );
 }

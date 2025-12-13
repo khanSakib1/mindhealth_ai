@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { JournalEntry } from "@/lib/definitions";
@@ -24,6 +25,8 @@ import { Loader2, PlusCircle, Sparkles, FileText, BrainCircuit, Lightbulb } from
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { format } from "date-fns";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { useRouter } from "next/navigation";
+import { addEntry, analyzeSentiment, getWellnessTips, summarizeEntry } from "@/app/(app)/journal/actions";
 
 const journalSchema = z.object({
   title: z.string().min(1, "Title is required.").max(100, "Title is too long."),
@@ -32,18 +35,14 @@ const journalSchema = z.object({
 
 type JournalListProps = {
   entries: JournalEntry[];
-  addEntry: (values: z.infer<typeof journalSchema>) => Promise<void>;
-  summarizeEntry: (entryId: string, content: string) => Promise<string>;
-  analyzeSentiment: (entryId: string, content: string) => Promise<{ sentiment: string; score: number }>;
-  getWellnessTips: (content: string) => Promise<string>;
 };
 
-export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentiment, getWellnessTips }: JournalListProps) {
+export function JournalList({ entries }: JournalListProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [aiResult, setAiResult] = useState<{ title: string; content: React.ReactNode } | null>(null);
   const [isAiLoading, setIsAiLoading] = useState(false);
-
+  const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof journalSchema>>({
@@ -54,10 +53,12 @@ export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentimen
   const onSubmit = async (values: z.infer<typeof journalSchema>) => {
     setIsSubmitting(true);
     try {
-      await addEntry(values);
+      // Hardcoded guest user
+      await addEntry('guest-user', values);
       toast({ title: "Journal entry saved!" });
       form.reset();
       setIsDialogOpen(false);
+      router.refresh();
     } catch (error) {
       toast({ title: "Failed to save entry", variant: "destructive" });
     } finally {
@@ -93,6 +94,7 @@ export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentimen
           </div>
         ),
       });
+      router.refresh();
     } catch {
       toast({ title: "Failed to analyze sentiment", variant: "destructive" });
     } finally {
@@ -104,7 +106,8 @@ export function JournalList({ entries, addEntry, summarizeEntry, analyzeSentimen
     setAiResult(null);
     setIsAiLoading(true);
     try {
-      const tips = await getWellnessTips(entry.content);
+      // Hardcoded guest user
+      const tips = await getWellnessTips('guest-user', entry.content);
       setAiResult({ title: "Personalized Wellness Tips", content: tips });
     } catch (error) {
        toast({ title: "Failed to get wellness tips", description: (error as Error).message, variant: "destructive" });

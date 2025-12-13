@@ -1,3 +1,4 @@
+
 "use client";
 import type { Mood, MoodLog } from "@/lib/definitions";
 import { useState } from "react";
@@ -20,6 +21,9 @@ import {
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { DayPicker, type DayProps } from "react-day-picker";
+import { addMoodLog, analyzePatterns } from "@/app/(app)/mood/actions";
+import { useRouter } from "next/navigation";
+
 
 const moodOptions: { mood: Mood, emoji: string, label: string, color: string, textColor: string }[] = [
   { mood: "great", emoji: "😄", label: "Great", color: "bg-green-500/20", textColor: "text-green-300" },
@@ -38,13 +42,12 @@ const formSchema = z.object({
 });
 
 type MoodTrackerProps = {
-    addMoodLog: (values: z.infer<typeof formSchema>) => Promise<void>;
     moodLogs: MoodLog[];
-    analyzePatterns: () => Promise<string>;
 }
 
-export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrackerProps) {
+export function MoodTracker({ moodLogs }: MoodTrackerProps) {
   const { toast } = useToast();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
   const [analysis, setAnalysis] = useState<string | null>(null);
@@ -58,13 +61,15 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      await addMoodLog(values);
+      // Hardcoded guest user
+      await addMoodLog('guest-user', values);
       toast({
         title: "Mood Logged",
         description: "Your mood has been saved successfully.",
       });
       form.reset();
       setSelectedMood(null);
+      router.refresh();
     } catch (error) {
       toast({
         title: "Error",
@@ -80,7 +85,8 @@ export function MoodTracker({ addMoodLog, moodLogs, analyzePatterns }: MoodTrack
     setAnalysis(null);
     setIsAiLoading(true);
     try {
-        const result = await analyzePatterns();
+        // Hardcoded guest user
+        const result = await analyzePatterns('guest-user', moodLogs);
         setAnalysis(result);
     } catch(error) {
         toast({ title: "Analysis Failed", description: (error as Error).message, variant: "destructive"})

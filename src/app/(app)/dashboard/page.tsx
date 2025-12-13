@@ -1,15 +1,13 @@
-"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, BookText, HeartPulse, MessageSquare, Smile, Lightbulb, Quote, Zap } from "lucide-react";
-import { useAuth } from "@/providers/auth-provider";
-import { useEffect, useState } from "react";
+import { ArrowRight, BookText, HeartPulse, MessageSquare, Smile, Lightbulb, Quote } from "lucide-react";
 import { getDashboardData, type DashboardData } from "./actions";
-import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { StressQuiz } from "@/components/dashboard/stress-quiz";
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const quickLinks = [
   { title: "Log Your Mood", href: "/mood", icon: Smile, description: "Quickly log how you're feeling today." },
@@ -40,26 +38,9 @@ function DashboardSkeleton() {
   );
 }
 
-export default function DashboardPage() {
-  const { user } = useAuth();
-  const [data, setData] = useState<DashboardData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (user) {
-      setIsLoading(true);
-      getDashboardData(user.uid)
-        .then(setData)
-        .catch(console.error)
-        .finally(() => setIsLoading(false));
-    } else {
-        setIsLoading(false);
-    }
-  }, [user]);
-
-  if (isLoading || !user) {
-    return <DashboardSkeleton />;
-  }
+async function DashboardDataContent() {
+  // Hardcoded guest user for now
+  const data = await getDashboardData('guest-user');
 
   if (!data) {
     return (
@@ -74,12 +55,7 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight font-headline">Good morning, {user?.displayName || 'friend'}.</h1>
-        <p className="text-muted-foreground">Welcome back to your wellness dashboard.</p>
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
+       <div className="grid gap-6 md:grid-cols-2">
         <Card className="bg-gradient-to-br from-primary/30 to-primary/10 border-primary/20">
             <CardHeader>
                 <CardTitle className="font-headline flex items-center gap-2"><Quote className="text-yellow-300" /> Quote of the Day</CardTitle>
@@ -165,6 +141,20 @@ export default function DashboardPage() {
               )}
           </CardContent>
       </Card>
+    </div>
+  );
+}
+
+export default function DashboardPage() {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight font-headline">Good morning, friend.</h1>
+        <p className="text-muted-foreground">Welcome back to your wellness dashboard.</p>
+      </div>
+      <Suspense fallback={<DashboardSkeleton />}>
+        <DashboardDataContent />
+      </Suspense>
     </div>
   );
 }

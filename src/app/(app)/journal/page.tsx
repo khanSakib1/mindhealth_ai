@@ -1,20 +1,13 @@
-"use client";
 
 import { JournalList } from "@/components/journal/journal-list";
 import type { JournalEntry } from "@/lib/definitions";
-import { addEntry, analyzeSentiment, getJournalEntries, getWellnessTips, summarizeEntry } from "./actions";
-import { z } from "zod";
-import { useAuth } from "@/providers/auth-provider";
-import { useEffect, useState, useTransition } from "react";
+import { getJournalEntries } from "./actions";
+import { Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlusCircle } from "lucide-react";
 
-const journalSchema = z.object({
-  title: z.string().min(1).max(100),
-  content: z.string().min(10).max(5000),
-});
 
 function JournalSkeleton() {
   return (
@@ -55,61 +48,16 @@ function JournalSkeleton() {
   );
 }
 
+async function JournalContent() {
+  // Hardcoded guest user
+  const entries = await getJournalEntries('guest-user');
+  return <JournalList entries={entries} />;
+}
+
 export default function JournalPage() {
-  const { user } = useAuth();
-  const [isPending, startTransition] = useTransition();
-  const [entries, setEntries] = useState<JournalEntry[] | null>(null);
-
-  const fetchEntries = () => {
-    if (user) {
-      setEntries(null); // Trigger skeleton
-      getJournalEntries(user.uid).then(setEntries);
-    }
-  };
-
-  useEffect(() => {
-    if (user) {
-        getJournalEntries(user.uid).then(setEntries);
-    }
-  }, [user]);
-
-  const handleAddEntry = async (values: z.infer<typeof journalSchema>) => {
-    if (!user) throw new Error("Not authenticated");
-    await addEntry(user.uid, values);
-    startTransition(() => {
-      fetchEntries();
-    });
-  };
-
-  const handleSummarize = (entryId: string, content: string) => {
-    return summarizeEntry(entryId, content);
-  };
-  
-  const handleAnalyze = async (entryId: string, content: string) => {
-    if (!user) throw new Error("Not authenticated");
-    const result = await analyzeSentiment(entryId, content);
-     startTransition(() => {
-      fetchEntries();
-    });
-    return result;
-  };
-  
-  const handleGetWellnessTips = (content: string) => {
-    if (!user) throw new Error("Not authenticated");
-    return getWellnessTips(user.uid, content);
-  }
-
-  if (!user || entries === null) {
-    return <JournalSkeleton />;
-  }
-
   return (
-    <JournalList 
-      entries={entries} 
-      addEntry={handleAddEntry} 
-      summarizeEntry={handleSummarize} 
-      analyzeSentiment={handleAnalyze}
-      getWellnessTips={handleGetWellnessTips}
-    />
+    <Suspense fallback={<JournalSkeleton />}>
+      <JournalContent />
+    </Suspense>
   );
 }
