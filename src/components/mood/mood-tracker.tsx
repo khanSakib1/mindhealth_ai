@@ -174,7 +174,7 @@ export function MoodTracker({ moodLogs }: MoodTrackerProps) {
                       <FormItem>
                           <FormLabel>Select your mood</FormLabel>
                           <FormControl>
-                          <div className="flex justify-between gap-2">
+                          <div className="grid grid-cols-5 gap-2">
                               {moodOptions.map(({ mood, emoji, label }) => (
                               <TooltipProvider key={mood} delayDuration={100}>
                                   <Tooltip>
