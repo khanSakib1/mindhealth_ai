@@ -4,7 +4,6 @@ import { SidebarNav } from "@/components/layout/sidebar-nav";
 import Link from "next/link";
 import { AppLogo } from "@/components/icons";
 import { MobileSidebar } from "@/components/layout/mobile-sidebar";
-import { UserNav } from "@/components/layout/user-nav";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
