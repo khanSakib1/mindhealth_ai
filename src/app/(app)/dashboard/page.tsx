@@ -146,10 +146,13 @@ async function DashboardDataContent() {
 }
 
 export default function DashboardPage() {
+  // In a real app, you would get the user's name from authentication
+  const userName = 'friend';
+
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight font-headline">Good morning, friend.</h1>
+        <h1 className="text-3xl font-bold tracking-tight font-headline">Good morning, {userName}.</h1>
         <p className="text-muted-foreground">Welcome back to your wellness dashboard.</p>
       </div>
       <Suspense fallback={<DashboardSkeleton />}>
