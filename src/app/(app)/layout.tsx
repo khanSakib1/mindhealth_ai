@@ -20,7 +20,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col">
         <header className="flex h-16 items-center justify-between md:justify-end border-b px-4 lg:px-6 bg-card/50 backdrop-blur-sm">
           <MobileSidebar />
-          <div />
         </header>
         <main className="flex-1 p-4 md:p-8 lg:p-10">
             {children}
