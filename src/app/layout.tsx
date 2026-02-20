@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
+import type { CSSProperties } from 'react';
 import './globals.css';
 import { AuthProvider } from "@/providers/auth-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { Inter, Poppins } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -10,16 +10,10 @@ export const metadata: Metadata = {
   description: 'Your AI-Powered Mental Health Companion',
 };
 
-const fontBody = Inter({ 
-  subsets: ['latin'],
-  variable: '--font-body',
-});
-
-const fontHeadline = Poppins({
-  subsets: ['latin'],
-  weight: ['600', '700'],
-  variable: '--font-headline',
-});
+const fontVariables = {
+  '--font-body': 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  '--font-headline': 'Poppins, Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+} as CSSProperties;
 
 export default function RootLayout({
   children,
@@ -28,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={cn("font-body antialiased", fontBody.variable, fontHeadline.variable)}>
+      <body className={cn("font-body antialiased")} style={fontVariables}>
         <AuthProvider>
           {children}
           <Toaster />
