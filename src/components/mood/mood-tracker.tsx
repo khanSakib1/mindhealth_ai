@@ -20,7 +20,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { DayPicker, type DayProps } from "react-day-picker";
 import { addMoodLog, analyzePatterns } from "@/app/(app)/mood/actions";
 import { useRouter } from "next/navigation";
 
@@ -96,54 +95,45 @@ export function MoodTracker({ moodLogs }: MoodTrackerProps) {
   }
 
   const MoodCalendar = () => {
-    const moodDays = moodLogs.map(log => ({
-        date: new Date(log.date.replace(/-/g, '/')), // Use / to avoid timezone issues
-        mood: log.mood,
-        notes: log.notes
-    }));
-  
+    const moodByDate = new Map(
+      moodLogs.map((log) => [
+        log.date,
+        {
+          mood: log.mood,
+          notes: log.notes,
+          info: moodOptions.find((option) => option.mood === log.mood),
+        },
+      ])
+    );
+
+    const selectedDays = moodLogs.map((log) => new Date(log.date.replace(/-/g, "/")));
+
     return (
-      <TooltipProvider>
-        <Calendar
-          mode="multiple"
-          selected={moodDays.map(day => day.date)}
-          className="rounded-md border p-0"
-          classNames={{
-            day: "h-12 w-12 text-lg",
-          }}
-          components={{
-            Day: ({ date, displayMonth }: DayProps) => {
-              if (!date || !displayMonth) {
-                return <td role="gridcell" className="h-12 w-12"></td>;
-              }
-              const dayMatch = moodDays.find(
-                (d) => d.date.toDateString() === date.toDateString() && d.date.getMonth() === displayMonth.getMonth()
-              );
-              
-              if (dayMatch) {
-                const moodInfo = moodOptions.find(m => m.mood === dayMatch.mood);
-                return (
-                  <td role="gridcell">
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <div className={cn(`relative flex h-12 w-12 items-center justify-center rounded-md`, moodInfo?.color)}>
-                          <span className="text-2xl">{moodInfo?.emoji}</span>
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className={cn('font-bold', moodInfo?.textColor)}>{moodInfo?.label}</p>
-                        {dayMatch.notes && <p className="text-sm text-muted-foreground">{dayMatch.notes}</p>}
-                      </TooltipContent>
-                    </Tooltip>
-                  </td>
-                );
-              }
-              
-              return <td role="gridcell"><div className="h-12 w-12 flex items-center justify-center text-muted-foreground/50">{date.getDate()}</div></td>;
-            },
-          }}
-        />
-      </TooltipProvider>
+      <Calendar
+        mode="multiple"
+        selected={selectedDays}
+        className="rounded-md border p-0"
+        classNames={{
+          day: "h-12 w-12 text-lg",
+        }}
+        modifiers={{
+          great: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.mood === "great",
+          good: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.mood === "good",
+          neutral: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.mood === "neutral",
+          bad: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.mood === "bad",
+          awful: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.mood === "awful",
+        }}
+        modifiersClassNames={{
+          great: "bg-green-500/20",
+          good: "bg-lime-500/20",
+          neutral: "bg-yellow-500/20",
+          bad: "bg-orange-500/20",
+          awful: "bg-red-500/20",
+        }}
+        formatters={{
+          formatDay: (date) => moodByDate.get(date.toISOString().slice(0, 10))?.info?.emoji ?? String(date.getDate()),
+        }}
+      />
     );
   };
 
